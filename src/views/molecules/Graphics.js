@@ -5,7 +5,7 @@ import $ from 'jquery';
 import _ from 'lodash'; // Assuming you're using lodash
 import 'bootstrap-slider';
 
-function Graphics({ response }) {
+function Graphics({response}) {
     const DEFAULT_SETTINGS = [false, 3, 3, 1];
     const [sectionId, setSectionId] = useState(null);
     const [isGraph, setIsGraph] = useState(false);
@@ -29,13 +29,14 @@ function Graphics({ response }) {
     const [framesNumber, setFramesNumber] = useState(0);
 
     useEffect(() => {
-        if(response==="") return;
+        if (response === "") return;
         initData();
         init();
     }, [response]);
 
     const initData = () => {
         let task = response.task;
+        if (!response.task || response.task === "") return;
 
         setSectionId(0);
         setIsGraph(containsGraphCommand(task));
@@ -46,7 +47,7 @@ function Graphics({ response }) {
         setIsPlot3dCollection(task.indexOf('\\showPlots3D') >= 0);
         setIsPlot3dCollectionIntersection(task.indexOf('\\intersection3D') >= 0);
         if (isPlot3dCollectionIntersection) {
-           // task = task.replace('\\intersection3D', '\\showPlots3D');
+            // task = task.replace('\\intersection3D', '\\showPlots3D');
             setIsPlot3dCollection(true);
         }
         setIsPlot3dParametric(task.indexOf('\\parametricPlot3d') >= 0);
@@ -77,13 +78,14 @@ function Graphics({ response }) {
             ringParameters,
             isTablePlot
         };
-        elRef.current.innerHTML = imgPath;
+
+        elRef.current.src = imgPath;
         //elRef.current.innerHTML = props.graphAddonsTpl(graphAddonsTplData);
         //const replotBtn = $(elRef.current).find('.btn-replot');
         //parametersButtonsRef.current = $(elRef.current).find('.parameters');
         //sliderRef.current = $(elRef.current).find('.parameter-slider');
 
-        $(elRef.current).on('click', '.btn-download', _handleBtnDownload);
+        //$(elRef.current).on('click', '.btn-download', _handleBtnDownload);
         // if (!isTablePlot) {
         //     replotBtn.on('click', props._handleBtnReplotNonTableplot);
         // }
@@ -117,7 +119,7 @@ function Graphics({ response }) {
         //     props.init3d();
         // }
 
-        graphImgRef.current.classList.remove('threed');
+        // graphImgRef.current.classList.remove('threed');
 
         // Assuming you have functions to initialize different types of plots
         // if (isPlot3dImplicit && !isPlot3dCollection) {
@@ -136,6 +138,7 @@ function Graphics({ response }) {
         //     props.initRenderMultipleSurfaces();
         // }
     };
+
     function url(path) {
         var localeStr = '';
         // if (locale) {
@@ -143,6 +146,7 @@ function Graphics({ response }) {
         // }
         return ((path.charAt(0) === '/') ? path : '/' + path) + localeStr;
     }
+
     const _handleBtnDownload = (ev) => {
         ev.preventDefault();
         //const framesNumber = parseInt($(elRef.current).find('.frames-number input').val(), 10);
@@ -164,7 +168,7 @@ function Graphics({ response }) {
     }
 
     function containsGraphCommand(task) {
-        return  task.indexOf('\\plot') >= 0
+        return task.indexOf('\\plot') >= 0
             || task.indexOf('\\textPlot') >= 0
             || task.indexOf('\\paramPlot') >= 0
             || task.indexOf('\\plotGraph') >= 0
@@ -217,9 +221,9 @@ function Graphics({ response }) {
     return (
         <div ref={elRef} className="graph-additional">
             <div className="frames-number">
-                <input type="number" value={framesNumber} onChange={e => setFramesNumber(e.target.value)} />
+                <input type="number" value={framesNumber} onChange={e => setFramesNumber(e.target.value)}/>
             </div>
-            <img src={imgPath} alt="Graph" />
+            <img src={imgPath} alt="Graph" className="graph-additional-img"/>
             <button onClick={_handleBtnDownload}>Download</button>
             {/* Rest of your component... */}
         </div>

@@ -1,6 +1,6 @@
 import React, {memo, useContext, useState} from 'react';
 import InputAreaContext from "../context/InputAreaContext";
-import {calc} from "../api/apiClient";
+import {calc, spaceMemory} from "../api/apiClient";
 import {Plot} from "./molecules/Plot";
 import {Text as MathJaxText, Context as MathJaxContext} from 'react-mathjax2';
 import Graphics from "./molecules/Graphics";
@@ -25,13 +25,18 @@ function InputArea() {
         const body =
             {
                 sectionId: 0,
-                task: userInput.replace(/\\\\/g, "\\n").replace(/\\newline/g, "\n")
+                task: userInput.replace(/\\{2}/g, "\\").replace(/\\n/g, "\n")
+                // task: userInput.replace(/\\{2}/g, "\\")
+                // task: userInput.replace(/\\\\/g, "\\n").replace(/\\newline/g, "\n")
             };
 
-        const data = await calc(body);
+        const data = await calc(body).then((resp) => {
+            console.log(resp)
+            setLatexOutput(resp)
+        });
+        const spaceMem = await spaceMemory();
 
-        console.log(data)
-        setLatexOutput(data)
+
         //setInput(data);
 
     }
