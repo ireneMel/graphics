@@ -15,3 +15,8 @@ export const fetchPlot3DImplicit = async (sectionId, taskString) => {
     const response = await API.post(`/api/plot3dimplicit`, {sectionId, task: taskString})
     return response.data;
 }
+
+export const fetchPlot3DExplicit = async (sectionId, taskString) => {
+    const response = await API.post(`/api/plot3dexplicit`, {sectionId, task: taskString})
+    return response.data;
+}

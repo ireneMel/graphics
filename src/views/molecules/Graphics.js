@@ -6,7 +6,8 @@ import _ from 'lodash'; // Assuming you're using lodash
 import 'bootstrap-slider';
 import TablePlotUI from "./TablePlotUI";
 import Mathpar3D from "./Mathpar3D";
-import Plot3DImplicit from "./Plot3DImplicit";
+import Plot3D from "./Plot3d";
+import {Plot3DType} from "../../utils/enums";
 
 function Graphics({response}) {
     const DEFAULT_SETTINGS = [false, 3, 3, 1];
@@ -66,7 +67,7 @@ function Graphics({response}) {
         setParamSettingsChanged(false);
         setEl(document.querySelector(`#section_${0} .graph-additional`));
     };
-
+    const [key, setKey] = useState(0);
     const init = () => {
         const withParameters = !isTablePlot && ringParameters.length > 0;
 
@@ -131,15 +132,15 @@ function Graphics({response}) {
             (isPlot3dCollection && !isRenderMultipleSurfaces)
         );
 
-        if(showImageTmp) {
+        //if(showImageTmp) {
             document.querySelectorAll("canvas").forEach((canvas) => {
                 canvas.remove();
             });
-        }
+        //}
 
         setShowImage(showImageTmp)
 
-
+        setKey(prevKey => prevKey + 1); // This will trigger a re-render
         // if (isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) {
         //     props.initPlot3dExplicit();
         // }
@@ -227,7 +228,7 @@ function Graphics({response}) {
 
 
     return (
-        <div ref={elRef} className="graph-additional">
+        <div ref={elRef} className="graph-additional" key={key}>
             <div className="frames-number">
                 <input type="number" value={framesNumber} onChange={e => setFramesNumber(e.target.value)}/>
             </div>
@@ -236,8 +237,8 @@ function Graphics({response}) {
             {/*<button onClick={_handleBtnDownload}>Download</button>*/}
             {/*{isTablePlot && <TablePlotUI/>}*/}
             {/*{isPlot3d && <Mathpar3D sectionId={sectionId}/>}*/}
-            {(isPlot3dImplicit && !isPlot3dCollection && !showImage) && <Plot3DImplicit sectionId={sectionId}/>}
-            {(isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection)}
+            {(isPlot3dImplicit && !isPlot3dCollection) && <Plot3D sectionId={sectionId} type={Plot3DType.IMPLICIT}/>}
+            {(isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) && <Plot3D sectionId={sectionId} type={Plot3DType.EXPLICIT}/>}
         </div>
     );
 }
