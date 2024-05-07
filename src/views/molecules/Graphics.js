@@ -4,6 +4,9 @@ import $ from 'jquery';
 //import { getSpaceParameters } from 'sidebar';
 import _ from 'lodash'; // Assuming you're using lodash
 import 'bootstrap-slider';
+import TablePlotUI from "./TablePlotUI";
+import Mathpar3D from "./Mathpar3D";
+import Plot3DImplicit from "./Plot3DImplicit";
 
 function Graphics({response}) {
     const DEFAULT_SETTINGS = [false, 3, 3, 1];
@@ -27,6 +30,7 @@ function Graphics({response}) {
     const [el, setEl] = useState(null);
     const elRef = useRef(null);
     const [framesNumber, setFramesNumber] = useState(0);
+    const [showImage, setShowImage] = useState(false);
 
     useEffect(() => {
         if (response === "") return;
@@ -110,21 +114,32 @@ function Graphics({response}) {
         // }
 
         $(window).on('resize', function () {
-            // Assuming you have a resize handler function
             $(window).trigger('resize')
         });
 
         // Assuming you have a function to initialize 3D stuff
-        // if (isPlot3d) {
-        //     props.init3d();
-        // }
+
 
         // graphImgRef.current.classList.remove('threed');
 
         // Assuming you have functions to initialize different types of plots
-        // if (isPlot3dImplicit && !isPlot3dCollection) {
-        //     props.initPlot3dImplicit();
-        // }
+
+        let showImageTmp = !(
+            (isPlot3dImplicit && !isPlot3dCollection) ||
+            (isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) ||
+            (isPlot3dParametric && !isRenderMultipleSurfaces && !isPlot3dCollection) ||
+            (isPlot3dCollection && !isRenderMultipleSurfaces)
+        );
+
+        if(showImageTmp) {
+            document.querySelectorAll("canvas").forEach((canvas) => {
+                canvas.remove();
+            });
+        }
+
+        setShowImage(showImageTmp)
+
+
         // if (isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) {
         //     props.initPlot3dExplicit();
         // }
@@ -139,14 +154,6 @@ function Graphics({response}) {
         // }
     };
 
-    function url(path) {
-        var localeStr = '';
-        // if (locale) {
-        //     localeStr = ((path.indexOf('?') >= 0) ? '&' : '?') + 'locale=' + locale;
-        // }
-        return ((path.charAt(0) === '/') ? path : '/' + path) + localeStr;
-    }
-
     const _handleBtnDownload = (ev) => {
         ev.preventDefault();
         //const framesNumber = parseInt($(elRef.current).find('.frames-number input').val(), 10);
@@ -159,6 +166,7 @@ function Graphics({response}) {
         }
     };
 
+    //TODO - move to util
     function getImageUrl(sectionId, frame) {
         return ('http://localhost:8080/servlet/image?section_number='
             + sectionId
@@ -212,7 +220,7 @@ function Graphics({response}) {
     const _areGraphParametersChanged = () => {
 
     }
-    const graphImgRef = useRef();
+
     useEffect(() => {
         console.log('ImagePath', imgPath)
     }, [imgPath])
@@ -223,9 +231,13 @@ function Graphics({response}) {
             <div className="frames-number">
                 <input type="number" value={framesNumber} onChange={e => setFramesNumber(e.target.value)}/>
             </div>
-            <img src={imgPath} alt="Graph" className="graph-additional-img"/>
-            <button onClick={_handleBtnDownload}>Download</button>
-            {/* Rest of your component... */}
+
+            {showImage && <img src={imgPath} alt="Graph" className="graph-additional-img"/>}
+            {/*<button onClick={_handleBtnDownload}>Download</button>*/}
+            {/*{isTablePlot && <TablePlotUI/>}*/}
+            {/*{isPlot3d && <Mathpar3D sectionId={sectionId}/>}*/}
+            {(isPlot3dImplicit && !isPlot3dCollection && !showImage) && <Plot3DImplicit sectionId={sectionId}/>}
+            {(isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection)}
         </div>
     );
 }

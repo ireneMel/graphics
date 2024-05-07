@@ -1,6 +1,6 @@
 import React, {memo, useContext, useState} from 'react';
 import InputAreaContext from "../context/InputAreaContext";
-import {calc, spaceMemory} from "../api/apiClient";
+import {sumbitToCalc, spaceMemory} from "../api/apiClient";
 import {Plot} from "./molecules/Plot";
 import {Text as MathJaxText, Context as MathJaxContext} from 'react-mathjax2';
 import Graphics from "./molecules/Graphics";
@@ -30,7 +30,7 @@ function InputArea() {
                 // task: userInput.replace(/\\\\/g, "\\n").replace(/\\newline/g, "\n")
             };
 
-        const data = await calc(body).then((resp) => {
+        const data = await sumbitToCalc(body).then((resp) => {
             console.log(resp)
             setLatexOutput(resp)
         });
@@ -68,7 +68,7 @@ function InputArea() {
             <div>
                 <textarea value={userInput} onChange={handleChange}/>
                 <button onClick={handleStart}>Start</button>
-                <Plot latex={userInput.task}/>
+                {/*<Plot latex={userInput.task}/>*/}
                 <Graphics response={latexOutput} />
                 <div id={`section_${0}`}>
                     {/*<div className="tex_panel">{renderLatexLines(latexOutput.task)}</div>*/}

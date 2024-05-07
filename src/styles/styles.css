@@ -16,3 +16,18 @@
     border: none;
     cursor: pointer;
 }
+
+/* plot 3D styles */
+.plot3d, .canvasPlot, .plot3d-implicit {
+    position: absolute;
+    z-index: 2;
+    border: 1px solid blue;
+}
+
+.graph-additional {
+    margin: 0;
+    padding: 2px;
+    background: rgb(255, 255, 255);
+    border-bottom: 1px dotted #CCC;
+    border-top: 1px dotted #CCC;
+}

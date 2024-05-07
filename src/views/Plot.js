@@ -46,7 +46,31 @@ class Plot extends React.Component {
                     />
                 </Section>
                 <Section title="Examples: 3D plots">
-
+                    <Button
+                        label="plot3d"
+                        title="Աղյուսակի ստեղծում բեռնված ֆայլից"
+                        inserts="\clean(); SPACE = R64[x, y, z];f = x^2 / 20 + y^2 / 20;\newline pl=\plot3d([f], [-20, 20, -20, 20]);"
+                    />
+                    <Button
+                        label="implicitPlot3d_1"
+                        title="Աղյուսակի ստեղծում բեռնված ֆայլից"
+                        inserts="\clean(); SPACE = R64[x, y, z];f = -x^2+2y^2+3z^2-25; iPl=\implicitPlot3d( f, -10, 10, -10, 10, -10, 10);"
+                    />
+                    <Button
+                        label="implicitPlot3d_2"
+                        title="Աղյուսակի ստեղծում բեռնված ֆայլից"
+                        inserts="\clean(); SPACE = R64[x, y, z];f = (x^2+y^2+z^2)^2-80xyz; iPl=\implicitPlot3d( f, -10, 10, -10, 10, -10, 10);"
+                    />
+                    <Button
+                        label="explicitPlot3d"
+                        title="Աղյուսակի ստեղծում բեռնված ֆայլից"
+                        inserts="\clean(); SPACE = R64[x, y, z];f = (x^2+y^2)/20; ePl=\explicitPlot3d( f, -10, 10, -10, 10, -10, 10, 40);"
+                    />
+                    <Button
+                        label="showPlots3D"
+                        title="Աղյուսակի ստեղծում բեռնված ֆայլից"
+                        inserts="\clean(); SPACE = R64[x, y, z]; \set3D(-5,5,-5,5,-10,10,40); f = -x^2+2y^2+3z^2-25; g = (x^2+y^2)/20; h=0; ePl=\showPlots3D(\implicitPlot3d(f), \explicitPlot3d(g));"
+                    />
                 </Section>
                 <Section title="Examples: Parametric 3D plots">
 

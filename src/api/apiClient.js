@@ -1,7 +1,7 @@
 import axios from "axios";
 import $ from 'jquery';
 
-const API = axios.create({
+export const API = axios.create({
     baseURL: "http://localhost:8080",
     // baseURL: "https://mathpar.ukma.edu.ua/",
     headers: {
@@ -21,7 +21,7 @@ const API = axios.create({
     // "credentials": "include"
 })
 
-export const calc = async (body) => {
+export const sumbitToCalc = async (body) => {
     // return $.ajax({
     //     url: 'http://localhost:8080/api/calc',
     //     type: 'POST',
