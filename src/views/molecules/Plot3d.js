@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import $ from 'jquery';
-import {fetchPlot3DExplicit, fetchPlot3DImplicit, fetchPlot3DParametric} from "../../api/apiClient3D";
+import {fetchPlot3DExplicit, fetchPlot3DImplicit, fetchPlot3DParametric, fetchShowplots3d} from "../../api/apiClient3D";
 import InputAreaContext from "../../context/InputAreaContext";
 import {Plot3DType} from "../../utils/enums";
 // import "../../styles"
@@ -25,6 +25,7 @@ const Plot3d = ({sectionId, type}) => {
         [Plot3DType.IMPLICIT]: fetchPlot3DImplicit,
         [Plot3DType.EXPLICIT]: fetchPlot3DExplicit,
         [Plot3DType.PARAMETRIC]: fetchPlot3DParametric,
+        [Plot3DType.SHOWPLOTS]: fetchShowplots3d
     };
 
     function init() {
@@ -125,6 +126,9 @@ const Plot3d = ({sectionId, type}) => {
         } else if (type === Plot3DType.EXPLICIT || type === Plot3DType.PARAMETRIC) {
             const vertices = geom.slice(1).map(toVector3);
             setupGeometryExplicit(vertices, geometry, stacks)
+        } else if (type === Plot3DType.SHOWPLOTS) {
+            //TODO: implement logic
+            // setupShowPlots
         }
 
         const ambientLight = new THREE.AmbientLight(0x404040);

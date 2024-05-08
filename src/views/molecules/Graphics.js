@@ -55,7 +55,7 @@ function Graphics({response}) {
         setIsPlot3dCollection(isPlot3dCollectionTmp);
         setIsPlot3dCollectionIntersection(isPlot3dCollectionIntersectionTmp);
         if (isPlot3dCollectionIntersection) {
-            // task = task.replace('\\intersection3D', '\\showPlots3D');
+            task = task.replace('\\intersection3D', '\\showPlots3D');
             setIsPlot3dCollection(true);
         }
         setIsPlot3dParametric(isPlot3dParametricTmp);

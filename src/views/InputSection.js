@@ -1,102 +1,133 @@
-import React, {memo, useContext, useState} from 'react';
+import React, {memo, useContext, useEffect, useRef, useState} from 'react';
 import InputAreaContext from "../context/InputAreaContext";
 import {sumbitToCalc, spaceMemory} from "../api/apiClient";
 import Graphics from "./molecules/Graphics";
 import {Col, Row, Form, Button} from "react-bootstrap";
-
-const LatexLine = memo(({line}) => (
-    <div>
-        {/*<InlineMath>{line}</InlineMath>*/}
-        <div>
-            {/*{(line !== "" && line) && (*/}
-            {/*    <MathJax>{latexCode}</MathJax>*/}
-            {/*)}*/}
-            {/*This is an inline math formula: <MathJaxNode inline>{line}</MathJaxNode>*/}
-        </div>
-    </div>
-));
+// import { MathJaxProvider, MathJax } from 'better-react-mathjax';
+import {Node as MathJaxNode, Context as MathJaxContext} from 'react-mathjax2';
+import "../styles/styles.css"
 
 InputSection.defaultProps = {
     sectionId: 0,
-    addSection: () => {}
+    addSection: () => {
+    }
 }
 
 //TODO: implement addSection
 function InputSection({sectionId, addSection}) {
     const {userInput, setInput} = useContext(InputAreaContext)
     const [latexOutput, setLatexOutput] = useState("");
+    const [isError, setIsError] = useState(false);
+    const usePrevious = (value) => {
+        const ref = useRef();
+        useEffect(() => {
+            ref.current = value;
+        });
+        return ref.current;
+    }
+    const useHasChanged = (val) => {
+        const prevVal = usePrevious(val)
+        return prevVal !== val
+    }
+
+    const hasVal1Changed = useHasChanged(userInput)
+
+    useEffect(() => {
+        if (hasVal1Changed) {
+            showError()
+        }
+    }, [userInput])
+
 
     const handleChange = (event) => {
         setInput(event.target.value);
     };
 
     const handleStart = async () => {
+        setIsError(false);
         const body =
             {
                 sectionId: sectionId,
                 task: userInput.replace(/\\{2}/g, "\\").replace(/\\n/g, "\n")
             };
+        try {
+            await sumbitToCalc(body).then((resp) => {
+                console.log(resp)
+                if (resp.status === "ERROR") {
+                    showError(resp.errorMsg);
+                } else {
+                    setLatexOutput(resp);
+                }
 
-        const data = await sumbitToCalc(body).then((resp) => {
-            console.log(resp)
-            setLatexOutput(resp)
-        });
+            });
+        } catch (e) {
+            showError(e.message)
+        }
     }
 
-    const [isShowInputFields, setIsShowInputFields] = useState(true);
-
-    const showOut = () => setIsShowInputFields(true);
-    const showIn = () => setIsShowInputFields(false);
+    const [error, setError] = useState(null);
+    const showError = (error) => {
+        setError(error)
+        setIsError(true)
+        let images = document.querySelectorAll("#graph-additional-img")
+        while(images.length > 0) {
+            images[0].parentNode.removeChild(images[0]);
+        }
+    }
 
     const renderLatexLines = (lines) => {
         if (!lines || lines === "") return;
-        let array = lines.split('\n\n')
-        console.log("LINES", lines)
-        // return array.map((line, index) =>
-        //     !line.match(/^\$?\s*\$?$/) ? (
-        //         // <MathJaxNode key={index} formula={line} />
-        //         // <MathJax>{line}</MathJax>
-        //     ) : null
-        //     //line.trim() !== '' //&& line.replace(/\hline/g, '\\')
-        // );
+
+        let array = lines.replace(/ \\ /g, '').split('$');
+        let res = array.map((line, index) => {
+            return line && !line.match(/^\$?\s*\$?$/) &&
+                <div className="mathjax-node" key={index}>
+                    <MathJaxNode inline onError={() => showError}>{line}</MathJaxNode>
+                </div>;
+        })
+        return res;
     };
 
-
     return (
-        // <MathJaxContext
-        //     script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-        <Row className="mx-4">
-            <Col className="m-0 p-0 mb-3">
-                <Button variant="light" className="me-2" onClick={handleStart}>
-                    <i className="bi bi-play-fill"></i>
-                </Button>
-                <Button variant="light" onClick={addSection}>
-                    <i className="bi bi-plus-lg"></i>
-                </Button>
-            </Col>
+        <MathJaxContext input="tex" options={{
+            asciimath2jax: {
+                useMathMLspacing: true,
+                delimiters: [["$$", "$$"]],
+                preview: "none",
+            },
+            TeX: {
+                extensions: ["AMSmath.js", "AMSsymbols.js", "noErrors.js", "noUndefined.js"]
+            }
+        }}>
+            {/*// <MathJaxContext*/}
+            {/*//     script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">*/}
+            <Row className="mx-4">
 
-            <Form.Control as="textarea" className="shadow p-3 mb-5 bg-white rounded" placeholder="Enter text here..."
-                          onChange={handleChange} value={userInput} style={{resize: "none"}}/>
+                <Col className="m-0 p-0 mb-3">
+                    <Button variant="light" className="me-2" onClick={handleStart}>
+                        <i className="bi bi-play-fill"></i>
+                    </Button>
+                    <Button variant="light" onClick={addSection}>
+                        <i className="bi bi-plus-lg"></i>
+                    </Button>
+                </Col>
 
-            <Graphics response={latexOutput}/>
-            <div className="res_panel">{/* Render results here */}</div>
-            {/*<ExampleSections latex={userInput.task}/>*/}
-            <div id={`section_${0}`}>
-                {/*<div className="tex_panel">{renderLatexLines(latexOutput.task)}</div>*/}
-                {isShowInputFields ? (
-                    <>
-                        {/*<form>{renderLatexLines(latexOutput.latex)}</form>*/}
-                        <div className="res_panel">{/* Render results here */}</div>
-                    </>
-                ) : (
-                    <>
-                        {/*<div className="tex_panel">{renderLatexLines(latexOutput.latex)}</div>*/}
-                        {/*<div className="graph-additional">/!* Render additional graphics here *!/</div>*/}
-                        <Graphics response={latexOutput}/>
-                    </>
-                )}
-            </div>
-        </Row>
+                <Form.Control as="textarea" className="shadow p-3 mb-3 bg-white rounded"
+                              placeholder="Enter text here..."
+                              onChange={handleChange}
+                              value={userInput}
+                              style={{resize: "none"}}/>
+
+                {!isError && <Row className="mathjaxnode-container p-0 m-0 mb-3" style={{backgroundColor: '#fafafa'}}>
+                    {renderLatexLines(latexOutput.latex)}
+                </Row>}
+                <div>
+                    {!isError && <Graphics response={latexOutput}/>}
+                </div>
+
+                {error && <div style={{color: 'red'}}>{error}</div>}
+            </Row>
+        </MathJaxContext>
         // </MathJaxContext>
     )
         ;
