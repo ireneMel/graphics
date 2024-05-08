@@ -89,13 +89,6 @@ class ExampleSections extends React.Component {
                         inserts="\clean(); SPACE = R64[u, v]; X = \cos(u) * \sin(v) * 2.5; Y = \sin(u) * \sin(v) * 2.5; Z = \cos(v) + \ln(\tg(v / 2)) + u / 6; pPl=\parametricPlot3d(X, Y, Z, 0, 12.56, 0.001, 2, 64);"
                     />
                 </Section>
-                <Section title="Examples: Table in text">
-                    <ExampleButton
-                        label="Table in text"
-                        title=""
-                        inserts='" \begin{array}{|l|c|r|} \hline \hbox{This is}&{\bf bold}&{\it italic}\\ \hline 1&2&3\\ \hline \end{array} "'
-                    />
-                </Section>
                 <Section title="Examples: planimetria">
                     <ExampleButton
                         label="Point"
