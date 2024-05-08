@@ -1,12 +1,20 @@
 .App {
-  text-align: left;
+    text-align: left;
+    /*background: linear-gradient(320deg, #fc466b, #3f5efb)*/
+}
+
+body {
+    background: linear-gradient(320deg, #fc466b, #3f5efb);
+    margin: 0;
+    height: 100vh;
+    background-attachment: fixed;
 }
 
 .container {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .container > * {
-  flex: 1;
+    flex: 1;
 }
