@@ -1,5 +1,6 @@
 export const Plot3DType = {
     EXPLICIT: 1,
     IMPLICIT: 2,
-    PARAMETRIC: 3
+    PARAMETRIC: 3,
+    SHOWPLOTS: 4,
 }
