@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import $ from 'jquery';
-import {fetchPlot3DExplicit, fetchPlot3DImplicit} from "../../api/apiClient3D";
+import {fetchPlot3DExplicit, fetchPlot3DImplicit, fetchPlot3DParametric} from "../../api/apiClient3D";
 import InputAreaContext from "../../context/InputAreaContext";
 import {Plot3DType} from "../../utils/enums";
 // import "../../styles"
@@ -20,6 +20,12 @@ const Plot3d = ({sectionId, type}) => {
     function toVector3(geom) {
         return new THREE.Vector3(geom[0], geom[1], geom[2]);
     }
+
+    const fetchFunctions = {
+        [Plot3DType.IMPLICIT]: fetchPlot3DImplicit,
+        [Plot3DType.EXPLICIT]: fetchPlot3DExplicit,
+        [Plot3DType.PARAMETRIC]: fetchPlot3DParametric,
+    };
 
     function init() {
         if (document.querySelectorAll('canvas').length > 0) return;
@@ -50,16 +56,11 @@ const Plot3d = ({sectionId, type}) => {
         $canvas.insertAfter(container);
 
         try {
-            if (type === Plot3DType.IMPLICIT) {
-                fetchPlot3DImplicit(sectionId, userInput).then((geom) => {
-                    callBack(geom, camera, renderer)
-                });
-            } else if (type === Plot3DType.EXPLICIT) {
-                fetchPlot3DExplicit(sectionId, userInput).then((geom) => {
-                    callBack(geom, camera, renderer)
+            if (fetchFunctions[type]) {
+                fetchFunctions[type](sectionId, userInput).then((geom) => {
+                    callBack(geom, camera, renderer);
                 });
             }
-
         } catch (e) {
             alert('Error loading mesh for implicit 3D plot.');
         }
@@ -121,7 +122,7 @@ const Plot3d = ({sectionId, type}) => {
         if (type === Plot3DType.IMPLICIT) {
             const vertices = geom.slice(1).map(toVector3);
             setupGeometryImplicit(vertices, geometry);
-        } else if (type === Plot3DType.EXPLICIT) {
+        } else if (type === Plot3DType.EXPLICIT || type === Plot3DType.PARAMETRIC) {
             const vertices = geom.slice(1).map(toVector3);
             setupGeometryExplicit(vertices, geometry, stacks)
         }

@@ -1,13 +1,17 @@
 import React, {memo, useContext, useState} from 'react';
 import InputAreaContext from "../context/InputAreaContext";
 import {sumbitToCalc, spaceMemory} from "../api/apiClient";
-import {Plot} from "./molecules/Plot";
-import {Text as MathJaxText, Context as MathJaxContext} from 'react-mathjax2';
 import Graphics from "./molecules/Graphics";
 
 const LatexLine = memo(({line}) => (
     <div>
-        <MathJaxText inline>{line}</MathJaxText>
+        {/*<InlineMath>{line}</InlineMath>*/}
+        <div>
+            {/*{(line !== "" && line) && (*/}
+            {/*    <MathJax>{latexCode}</MathJax>*/}
+            {/*)}*/}
+            {/*This is an inline math formula: <MathJaxNode inline>{line}</MathJaxNode>*/}
+        </div>
     </div>
 ));
 
@@ -26,8 +30,6 @@ function InputArea() {
             {
                 sectionId: 0,
                 task: userInput.replace(/\\{2}/g, "\\").replace(/\\n/g, "\n")
-                // task: userInput.replace(/\\{2}/g, "\\")
-                // task: userInput.replace(/\\\\/g, "\\n").replace(/\\newline/g, "\n")
             };
 
         const data = await sumbitToCalc(body).then((resp) => {
@@ -35,58 +37,59 @@ function InputArea() {
             setLatexOutput(resp)
         });
         const spaceMem = await spaceMemory();
-
-
-        //setInput(data);
-
     }
-    const [isShowingOut, setIsShowingOut] = useState(false);
 
-    const showOut = () => setIsShowingOut(true);
-    const showIn = () => setIsShowingOut(false);
+    const [isShowInputFields, setIsShowInputFields] = useState(true);
 
-    // function renderLatex(latexOutput, texLines) {
-    //     latexOutput.empty();
-    //     // Wrap each non-empty line of LaTeX output with <div>.
-    //     latexOutput.append($.map(texLines, function (line) {
-    //         return !line.match(/^\$?\s*\$?$/) ? $('<div>' + line + '</div>') : null;
-    //     }));
-    //     MathJax.Hub.Queue(['Typeset', MathJax.Hub, latexOutput.get(0)]);
-    // }
+    const showOut = () => setIsShowInputFields(true);
+    const showIn = () => setIsShowInputFields(false);
+
     const renderLatexLines = (lines) => {
-        if (lines === "") return;
+        if (!lines || lines === "") return;
         let array = lines.split('\n\n')
         console.log("LINES", lines)
-        return array.map((line, index) =>
-            line.trim() !== '' && <LatexLine key={index} line={line}/>
-        );
+        // return array.map((line, index) =>
+        //     !line.match(/^\$?\s*\$?$/) ? (
+        //         // <MathJaxNode key={index} formula={line} />
+        //         // <MathJax>{line}</MathJax>
+        //     ) : null
+        //     //line.trim() !== '' //&& line.replace(/\hline/g, '\\')
+        // );
     };
-    //task":"\\set2D(-5,5,-4,6); f=3\\arctg(x+1); \\plot([f,-x+5, 3x+5]);"}
+
+
     return (
-        <MathJaxContext
-            script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-            <div>
-                <textarea value={userInput} onChange={handleChange}/>
-                <button onClick={handleStart}>Start</button>
-                {/*<Plot latex={userInput.task}/>*/}
-                <Graphics response={latexOutput} />
-                <div id={`section_${0}`}>
-                    {/*<div className="tex_panel">{renderLatexLines(latexOutput.task)}</div>*/}
-                    {/*{isShowingOut ? (*/}
-                    {/*    <>*/}
-                    {/*        <div className="tex_panel">{renderLatexLines(latexOutput)}</div>*/}
-                    {/*        <div className="graph-additional">/!* Render additional graphics here *!/</div>*/}
-                    {/*    </>*/}
-                    {/*) : (*/}
-                    {/*    <>*/}
-                    {/*        <form>{renderLatexLines(latexOutput)}</form>*/}
-                    {/*        <div className="res_panel">/!* Render results here *!/</div>*/}
-                    {/*    </>*/}
-                    {/*)}*/}
-                </div>
+        // <MathJaxContext
+        //     script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+        <div>
+                <textarea value={userInput} onChange={handleChange} style={{
+                    flex: 1,
+                    width: '100%',
+                    height: '100px'
+                }}/>
+            <button onClick={handleStart}>Start</button>
+            <Graphics response={latexOutput}/>
+            <div className="res_panel">{/* Render results here */}</div>
+            {/*<Plot latex={userInput.task}/>*/}
+            <div id={`section_${0}`}>
+                {/*<div className="tex_panel">{renderLatexLines(latexOutput.task)}</div>*/}
+                {isShowInputFields ? (
+                    <>
+                        {/*<form>{renderLatexLines(latexOutput.latex)}</form>*/}
+                        <div className="res_panel">{/* Render results here */}</div>
+                    </>
+                ) : (
+                    <>
+                        {/*<div className="tex_panel">{renderLatexLines(latexOutput.latex)}</div>*/}
+                        {/*<div className="graph-additional">/!* Render additional graphics here *!/</div>*/}
+                        <Graphics response={latexOutput}/>
+                    </>
+                )}
             </div>
-        </MathJaxContext>
-    );
+        </div>
+        // </MathJaxContext>
+    )
+        ;
 }
 
 export default InputArea;

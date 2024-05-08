@@ -1,8 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import axios from 'axios';
 import $ from 'jquery';
-//import { getSpaceParameters } from 'sidebar';
-import _ from 'lodash'; // Assuming you're using lodash
 import 'bootstrap-slider';
 import TablePlotUI from "./TablePlotUI";
 import Mathpar3D from "./Mathpar3D";
@@ -141,12 +138,7 @@ function Graphics({response}) {
         setShowImage(showImageTmp)
 
         setKey(prevKey => prevKey + 1); // This will trigger a re-render
-        // if (isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) {
-        //     props.initPlot3dExplicit();
-        // }
-        // if (isPlot3dParametric && !isRenderMultipleSurfaces && !isPlot3dCollection) {
-        //     props.initPlot3dParametric();
-        // }
+
         // if (isPlot3dCollection && !isRenderMultipleSurfaces) {
         //     props.initPlot3dCollection();
         // }
@@ -239,6 +231,8 @@ function Graphics({response}) {
             {/*{isPlot3d && <Mathpar3D sectionId={sectionId}/>}*/}
             {(isPlot3dImplicit && !isPlot3dCollection) && <Plot3D sectionId={sectionId} type={Plot3DType.IMPLICIT}/>}
             {(isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) && <Plot3D sectionId={sectionId} type={Plot3DType.EXPLICIT}/>}
+            {(isPlot3dParametric && !isRenderMultipleSurfaces && !isPlot3dCollection) && <Plot3D sectionId={sectionId} type={Plot3DType.PARAMETRIC}/>}
+
         </div>
     );
 }

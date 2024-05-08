@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import '../../styles/styles.css';
-import Button from "../atoms/Button";
 
 const Section = ({title, children}) => {
     const [isOpen, setIsOpen] = useState(false);

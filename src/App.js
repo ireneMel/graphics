@@ -8,14 +8,16 @@ function App() {
     const [userInput, setInput] = useState("");
 
     return (
-        <div className="App">
-            <div className="container">
-                <InpuAreaContext.Provider value={{userInput, setInput}}>
-                    <Plot/>
-                    <InputArea></InputArea>
-                </InpuAreaContext.Provider>
+        // <MathJaxContext>
+            <div className="App">
+                <div className="container">
+                    <InpuAreaContext.Provider value={{userInput, setInput}}>
+                        <Plot/>
+                        <InputArea></InputArea>
+                    </InpuAreaContext.Provider>
+                </div>
             </div>
-        </div>
+        // </MathJaxContext>
     );
 }
 
