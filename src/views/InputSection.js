@@ -2,6 +2,7 @@ import React, {memo, useContext, useState} from 'react';
 import InputAreaContext from "../context/InputAreaContext";
 import {sumbitToCalc, spaceMemory} from "../api/apiClient";
 import Graphics from "./molecules/Graphics";
+import {Col, Row, Form, Button} from "react-bootstrap";
 
 const LatexLine = memo(({line}) => (
     <div>
@@ -15,7 +16,13 @@ const LatexLine = memo(({line}) => (
     </div>
 ));
 
-function InputArea() {
+InputSection.defaultProps = {
+    sectionId: 0,
+    addSection: () => {}
+}
+
+//TODO: implement addSection
+function InputSection({sectionId, addSection}) {
     const {userInput, setInput} = useContext(InputAreaContext)
     const [latexOutput, setLatexOutput] = useState("");
 
@@ -61,16 +68,22 @@ function InputArea() {
     return (
         // <MathJaxContext
         //     script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-        <div>
-                <textarea value={userInput} onChange={handleChange} style={{
-                    flex: 1,
-                    width: '100%',
-                    height: '100px'
-                }}/>
-            <button onClick={handleStart}>Start</button>
+        <Row className="mx-4">
+            <Col className="m-0 p-0 mb-3">
+                <Button variant="outline-primary" className="me-2" onClick={handleStart}>
+                    <i className="bi bi-play-fill"></i>
+                </Button>
+                <Button variant="outline-primary" onClick={addSection}>
+                    <i className="bi bi-plus-lg"></i>
+                </Button>
+            </Col>
+
+            <Form.Control as="textarea" className="shadow p-3 mb-5 bg-white rounded" placeholder="Enter text here..."
+                          onChange={handleChange} value={userInput} style={{resize: "none"}}/>
+
             <Graphics response={latexOutput}/>
             <div className="res_panel">{/* Render results here */}</div>
-            {/*<Plot latex={userInput.task}/>*/}
+            {/*<ExampleSections latex={userInput.task}/>*/}
             <div id={`section_${0}`}>
                 {/*<div className="tex_panel">{renderLatexLines(latexOutput.task)}</div>*/}
                 {isShowInputFields ? (
@@ -86,10 +99,10 @@ function InputArea() {
                     </>
                 )}
             </div>
-        </div>
+        </Row>
         // </MathJaxContext>
     )
         ;
 }
 
-export default InputArea;
+export default InputSection;

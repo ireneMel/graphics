@@ -2,7 +2,7 @@ import React from 'react';
 import Button from "./atoms/Button";
 import Section from "./molecules/Section";
 
-class Plot extends React.Component {
+class ExampleSections extends React.Component {
     render() {
         return (
             <div>
@@ -172,4 +172,4 @@ class Plot extends React.Component {
     }
 }
 
-export default Plot;
+export default ExampleSections;

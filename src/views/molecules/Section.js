@@ -12,13 +12,13 @@ const Section = ({title, children}) => {
 
     return (
         <Card className="mb-3">
-            <Card.Header>
+            <Card.Header onClick={toggleOpen}>
                 <Row className="align-items-center">
                     <Col>
                         <Card.Title>{title}</Card.Title>
                     </Col>
                     <Col xs="auto">
-                        <Button variant="outline-primary" onClick={toggleOpen} aria-controls="example-collapse-text" aria-expanded={isOpen}>
+                        <Button variant="outline-primary" aria-controls="example-collapse-text" aria-expanded={isOpen}>
                             {isOpen ? <i className="bi bi-chevron-up"></i> : <i className="bi bi-chevron-down"></i>}
                         </Button>
                     </Col>

@@ -51,8 +51,7 @@ const Plot3d = ({sectionId, type}) => {
 
         const $canvas = $(renderer.domElement);
         $canvas.addClass('plot3d-implicit');
-        $canvas.width(700);
-        $canvas.height(500);
+        $canvas.width($canvas.parent().width() * 0.9);
         $canvas.insertAfter(container);
 
         try {

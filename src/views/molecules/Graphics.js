@@ -221,11 +221,11 @@ function Graphics({response}) {
 
     return (
         <div ref={elRef} className="graph-additional" key={key}>
-            <div className="frames-number">
-                <input type="number" value={framesNumber} onChange={e => setFramesNumber(e.target.value)}/>
-            </div>
+            {/*<div className="frames-number">*/}
+            {/*    <input type="number" value={framesNumber} onChange={e => setFramesNumber(e.target.value)}/>*/}
+            {/*</div>*/}
 
-            {showImage && <img src={imgPath} alt="Graph" className="graph-additional-img"/>}
+            {showImage && <img src={imgPath} alt="Graph" style={{width: '100%', height: '100%'}} className="graph-additional-img"/>}
             {/*<button onClick={_handleBtnDownload}>Download</button>*/}
             {/*{isTablePlot && <TablePlotUI/>}*/}
             {/*{isPlot3d && <Mathpar3D sectionId={sectionId}/>}*/}
