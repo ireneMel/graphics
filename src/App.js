@@ -9,7 +9,7 @@ function App() {
     const [userInput, setInput] = useState("");
 
     return (
-        <Row className="mt-5 mx-4">
+        <Row className="mt-5 mx-4" >
             <InpuAreaContext.Provider value={{userInput, setInput}}>
                 <Col md={4}>
                     <ExampleSections/>

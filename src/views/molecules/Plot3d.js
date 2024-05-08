@@ -34,7 +34,7 @@ const Plot3d = ({sectionId, type}) => {
 
         // CAMERA
         const SCREEN_WIDTH = container.parent().width();
-        const SCREEN_HEIGHT = container.parent().width() * 0.75;
+        const SCREEN_HEIGHT = container.parent().width() * 0.55;
         const VIEW_ANGLE = 45;
         const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
         const NEAR = 0.1;
@@ -51,7 +51,8 @@ const Plot3d = ({sectionId, type}) => {
 
         const $canvas = $(renderer.domElement);
         $canvas.addClass('plot3d-implicit');
-        $canvas.width($canvas.parent().width() * 0.9);
+        $canvas.css('background-color', '#fafafa');
+        // $canvas.width($canvas.parent().width() * 0.9);
         $canvas.insertAfter(container);
 
         try {

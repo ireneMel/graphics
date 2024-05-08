@@ -70,10 +70,10 @@ function InputSection({sectionId, addSection}) {
         //     script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
         <Row className="mx-4">
             <Col className="m-0 p-0 mb-3">
-                <Button variant="outline-primary" className="me-2" onClick={handleStart}>
+                <Button variant="light" className="me-2" onClick={handleStart}>
                     <i className="bi bi-play-fill"></i>
                 </Button>
-                <Button variant="outline-primary" onClick={addSection}>
+                <Button variant="light" onClick={addSection}>
                     <i className="bi bi-plus-lg"></i>
                 </Button>
             </Col>
