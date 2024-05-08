@@ -1,8 +1,6 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import $ from 'jquery';
 import 'bootstrap-slider';
-import TablePlotUI from "./TablePlotUI";
-import Mathpar3D from "./Mathpar3D";
 import Plot3D from "./Plot3d";
 import {Plot3DType} from "../../utils/enums";
 
@@ -32,28 +30,36 @@ function Graphics({response}) {
 
     useEffect(() => {
         if (response === "") return;
-        initData();
-        init();
+        let showImg = initData();
+        init(showImg);
     }, [response]);
 
     const initData = () => {
         let task = response.task;
         if (!response.task || response.task === "") return;
 
-        setSectionId(0);
+        setSectionId(response.sectionId);
         setIsGraph(containsGraphCommand(task));
         setIsTablePlot(containsTableplotCommand(task));
-        setIsPlot3d(task.indexOf('\\plot3d') >= 0 || task.indexOf('\\paramPlot3d') >= 0);
-        setIsPlot3dImplicit(task.indexOf('\\implicitPlot3d') >= 0);
-        setIsPlot3dExplicit(task.indexOf('\\explicitPlot3d') >= 0);
-        setIsPlot3dCollection(task.indexOf('\\showPlots3D') >= 0);
-        setIsPlot3dCollectionIntersection(task.indexOf('\\intersection3D') >= 0);
+
+        let isTablePlot3dTmp = task.indexOf('\\plot3d') >= 0 || task.indexOf('\\paramPlot3d') >= 0,
+            isPlot3dImplicitTmp = task.indexOf('\\implicitPlot3d') >= 0,
+            isPlot3dExplicitTmp = task.indexOf('\\explicitPlot3d') >= 0,
+            isPlot3dCollectionTmp = task.indexOf('\\showPlots3D') >= 0,
+            isPlot3dCollectionIntersectionTmp = task.indexOf('\\intersection3D') >= 0,
+            isPlot3dParametricTmp = task.indexOf('\\parametricPlot3d') >= 0,
+            isRenderMultipleSurfacesTmp = task.indexOf('\\show3d') >= 0
+        setIsPlot3d(isTablePlot3dTmp);
+        setIsPlot3dImplicit(isPlot3dImplicitTmp);
+        setIsPlot3dExplicit(isPlot3dExplicitTmp);
+        setIsPlot3dCollection(isPlot3dCollectionTmp);
+        setIsPlot3dCollectionIntersection(isPlot3dCollectionIntersectionTmp);
         if (isPlot3dCollectionIntersection) {
             // task = task.replace('\\intersection3D', '\\showPlots3D');
             setIsPlot3dCollection(true);
         }
-        setIsPlot3dParametric(task.indexOf('\\parametricPlot3d') >= 0);
-        setIsRenderMultipleSurfaces(task.indexOf('\\show3d') >= 0);
+        setIsPlot3dParametric(isPlot3dParametricTmp);
+        setIsRenderMultipleSurfaces(isRenderMultipleSurfacesTmp);
         setImgPath(isGraph || isTablePlot ? getImageUrl(0) : '');
         setImgPath(getImageUrl(0))
         setOldParameters([]);
@@ -63,14 +69,30 @@ function Graphics({response}) {
         //setRingParameters(getSpaceParameters(isPlot3d || isPlot3dImplicit || isPlot3dExplicit || isPlot3dParametric || isPlot3dCollection || isPlot3dCollectionIntersection || isRenderMultipleSurfaces));
         setParamSettingsChanged(false);
         setEl(document.querySelector(`#section_${0} .graph-additional`));
+
+
+        return !(
+            (isPlot3dImplicitTmp && !isPlot3dCollectionTmp) ||
+            (isPlot3dExplicitTmp && !isRenderMultipleSurfacesTmp && !isPlot3dCollectionTmp) ||
+            (isPlot3dParametricTmp && !isRenderMultipleSurfacesTmp && !isPlot3dCollectionTmp) ||
+            (isPlot3dCollectionTmp && !isRenderMultipleSurfacesTmp)
+        );
     };
+
     const [key, setKey] = useState(0);
-    const init = () => {
+    const init = (showImg) => {
         const withParameters = !isTablePlot && ringParameters.length > 0;
 
-        if (!(isGraph || isPlot3d || isPlot3dImplicit || isPlot3dExplicit || isPlot3dParametric || isTablePlot || isPlot3dCollection || isPlot3dCollectionIntersection || isRenderMultipleSurfaces)) {
+        setShowImage(showImg)
+
+        if (showImg) {
+            setKey(prevKey => prevKey + 1);
             return;
         }
+
+        // if (!(isGraph || isPlot3d || isPlot3dImplicit || isPlot3dExplicit || isPlot3dParametric || isTablePlot || isPlot3dCollection || isPlot3dCollectionIntersection || isRenderMultipleSurfaces)) {
+        //     return;
+        // }
 
         // Assuming graphAddonsTpl is a function that returns a string of HTML
         const graphAddonsTplData = {
@@ -115,27 +137,9 @@ function Graphics({response}) {
             $(window).trigger('resize')
         });
 
-        // Assuming you have a function to initialize 3D stuff
-
-
-        // graphImgRef.current.classList.remove('threed');
-
-        // Assuming you have functions to initialize different types of plots
-
-        let showImageTmp = !(
-            (isPlot3dImplicit && !isPlot3dCollection) ||
-            (isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) ||
-            (isPlot3dParametric && !isRenderMultipleSurfaces && !isPlot3dCollection) ||
-            (isPlot3dCollection && !isRenderMultipleSurfaces)
-        );
-
-        //if(showImageTmp) {
         document.querySelectorAll("canvas").forEach((canvas) => {
             canvas.remove();
         });
-        //}
-
-        setShowImage(showImageTmp)
 
         setKey(prevKey => prevKey + 1); // This will trigger a re-render
 

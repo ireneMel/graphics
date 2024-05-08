@@ -31,11 +31,9 @@ function InputSection({sectionId, addSection}) {
     };
 
     const handleStart = async () => {
-        //TODO: check parameter's correctcness before sending to prevent injections
-        //TODO: section ID - number of section on the screen from which the request was sent
         const body =
             {
-                sectionId: 0,
+                sectionId: sectionId,
                 task: userInput.replace(/\\{2}/g, "\\").replace(/\\n/g, "\n")
             };
 
@@ -43,7 +41,6 @@ function InputSection({sectionId, addSection}) {
             console.log(resp)
             setLatexOutput(resp)
         });
-        const spaceMem = await spaceMemory();
     }
 
     const [isShowInputFields, setIsShowInputFields] = useState(true);

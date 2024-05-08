@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import InpuAreaContext from "../../context/InputAreaContext";
 
-function Button({inserts, back, title, label}) {
+function ExampleButton({inserts, back, title, label}) {
 
     const {input, setInput} = useContext(InpuAreaContext);
     const handleClick = (insertText) => {
@@ -11,11 +11,12 @@ function Button({inserts, back, title, label}) {
     return (
         <button
             onClick={() => handleClick(inserts)}
-            className="btn btn-xs btn-example"
-            title={title}>
+            className="btn  btn-sm"
+            title={title}
+            style={{margin: '5px', boxShadow: '0px 3px 6px rgba(0,0,0,0.36)'}}>
             {label}
         </button>
     );
 }
 
-export default Button;
+export default ExampleButton;
