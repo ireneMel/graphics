@@ -25,3 +25,11 @@ export const fetchPlot3DParametric = async (sectionId, taskString) => {
     const response = await API.post(`/api/plot3dparametric`, {sectionId, task: taskString})
     return response.data;
 }
+
+export const fetchShowplots3d = async (sectionId, taskString) => {
+    if (taskString.indexOf('\\intersection3D') >= 0) {
+        taskString = taskString.replace('\\intersection3D', '\\showPlots3D');
+    }
+    const response = await API.post(`/api/showplots3d`, {sectionId, task: taskString})
+    return response.data;
+}
