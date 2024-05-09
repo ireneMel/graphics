@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import filelistTpl from './filelistTpl'; // Assuming filelistTpl is a React component
 
 function FileList() {
     const [filelist, setFilelist] = useState([]);

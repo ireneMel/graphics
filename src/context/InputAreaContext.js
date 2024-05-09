@@ -1,5 +1,5 @@
 import React from 'react';
 
-const InpuAreaContext = React.createContext();
+const InputAreaContext = React.createContext();
 
-export default InpuAreaContext;
+export default InputAreaContext;

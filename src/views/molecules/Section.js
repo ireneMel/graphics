@@ -56,17 +56,6 @@ const Section = ({title, children}) => {
             <div className={`section-content ${isOpen ? 'open' : ''}`}>
                 {children}
             </div>
-            {/*{isOpen &&*/}
-            {/*    <div id="kbd_plots" className="kbd collapse">*/}
-            {/*        <div className="well well-small">*/}
-            {/*            <div id="kbd_plot_2d_examples" className="collapse">*/}
-            {/*                <div className="section-content">*/}
-            {/*                    {children}*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*}*/}
         </div>
     );
 };

@@ -17,15 +17,7 @@ function Graphics({response}) {
     const [isPlot3dParametric, setIsPlot3dParametric] = useState(false);
     const [isRenderMultipleSurfaces, setIsRenderMultipleSurfaces] = useState(false);
     const [imgPath, setImgPath] = useState('');
-    const [oldParameters, setOldParameters] = useState([]);
-    const [oldSettings, setOldSettings] = useState(DEFAULT_SETTINGS); // Assuming DEFAULT_SETTINGS is defined somewhere
-    const [parameters, setParameters] = useState([]);
-    const [settings, setSettings] = useState([]);
-    const [ringParameters, setRingParameters] = useState([]);
-    const [paramSettingsChanged, setParamSettingsChanged] = useState(false);
-    const [el, setEl] = useState(null);
-    const elRef = useRef(null);
-    const [framesNumber, setFramesNumber] = useState(0);
+    const elRef = useRef(null)
     const [showImage, setShowImage] = useState(false);
 
     useEffect(() => {
@@ -62,14 +54,6 @@ function Graphics({response}) {
         setIsRenderMultipleSurfaces(isRenderMultipleSurfacesTmp);
         setImgPath(isGraph || isTablePlot ? getImageUrl(0) : '');
         setImgPath(getImageUrl(0))
-        setOldParameters([]);
-        setOldSettings(DEFAULT_SETTINGS);
-        setParameters([]);
-        setSettings([]);
-        //setRingParameters(getSpaceParameters(isPlot3d || isPlot3dImplicit || isPlot3dExplicit || isPlot3dParametric || isPlot3dCollection || isPlot3dCollectionIntersection || isRenderMultipleSurfaces));
-        setParamSettingsChanged(false);
-        setEl(document.querySelector(`#section_${0} .graph-additional`));
-
 
         return !(
             (isPlot3dImplicitTmp && !isPlot3dCollectionTmp) ||
@@ -81,8 +65,6 @@ function Graphics({response}) {
 
     const [key, setKey] = useState(0);
     const init = (showImg) => {
-        const withParameters = !isTablePlot && ringParameters.length > 0;
-
         setShowImage(showImg)
 
         if (showImg) {
@@ -90,77 +72,19 @@ function Graphics({response}) {
             return;
         }
 
-        // if (!(isGraph || isPlot3d || isPlot3dImplicit || isPlot3dExplicit || isPlot3dParametric || isTablePlot || isPlot3dCollection || isPlot3dCollectionIntersection || isRenderMultipleSurfaces)) {
-        //     return;
-        // }
-
-        // Assuming graphAddonsTpl is a function that returns a string of HTML
-        const graphAddonsTplData = {
-            //msg: props.msg,
-            imgPath,
-            withParameters,
-            ringParameters,
-            isTablePlot
-        };
-
         elRef.current.src = imgPath;
-        //elRef.current.innerHTML = props.graphAddonsTpl(graphAddonsTplData);
-        //const replotBtn = $(elRef.current).find('.btn-replot');
-        //parametersButtonsRef.current = $(elRef.current).find('.parameters');
-        //sliderRef.current = $(elRef.current).find('.parameter-slider');
-
-        //$(elRef.current).on('click', '.btn-download', _handleBtnDownload);
-        // if (!isTablePlot) {
-        //     replotBtn.on('click', props._handleBtnReplotNonTableplot);
-        // }
-
-        // if (withParameters) {
-        //     parametersButtonsRef.current.find('.btn.active').removeClass('active');
-        //     parametersButtonsRef.current.find('.btn').eq(0).addClass('active');
-        //     parametersButtonsRef.current.find('input[name="parameters"]').on('change', function () {
-        //         sliderRef.current.slider('setValue', parseFloat($(this).siblings('.val').text()));
-        //     });
-        //     _.defer(function () {
-        //         sliderRef.current.slider({min: 0, max: 1, step: 0.01, value: 1, tooltip: 'hide'});
-        //         sliderRef.current.on('slide', function (ev) {
-        //             parametersButtonsRef.current.find('.btn.active').find('.val').text(ev.value.toFixed(2));
-        //         });
-        //     });
-        // }
-        //
-        // if (isTablePlot) {
-        //     props.tablePlotUi.init();
-        //     props.tablePlotUi.appendCanvasTo(graphImgRef.current);
-        // }
-
         $(window).on('resize', function () {
             $(window).trigger('resize')
         });
-
         document.querySelectorAll("canvas").forEach((canvas) => {
             canvas.remove();
         });
-
         setKey(prevKey => prevKey + 1); // This will trigger a re-render
-
-        // if (isPlot3dCollection && !isRenderMultipleSurfaces) {
-        //     props.initPlot3dCollection();
-        // }
-        // if (isRenderMultipleSurfaces) {
-        //     props.initRenderMultipleSurfaces();
-        // }
     };
 
     const _handleBtnDownload = (ev) => {
         ev.preventDefault();
-        //const framesNumber = parseInt($(elRef.current).find('.frames-number input').val(), 10);
-        if (framesNumber > 1) {
-            for (let i = 0; i < framesNumber; i++) {
-                window.open(getImageUrl(response.sectionId, i) + '&download=true');
-            }
-        } else {
-            window.open(response.imgPath + '&download=true');
-        }
+        //TODO - implement
     };
 
     //TODO - move to util
@@ -217,10 +141,6 @@ function Graphics({response}) {
     const _areGraphParametersChanged = () => {
 
     }
-
-    useEffect(() => {
-        console.log('ImagePath', imgPath)
-    }, [imgPath])
 
 
     return (

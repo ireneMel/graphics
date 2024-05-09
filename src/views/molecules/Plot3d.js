@@ -1,11 +1,10 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import $ from 'jquery';
 import {fetchPlot3DExplicit, fetchPlot3DImplicit, fetchPlot3DParametric, fetchShowplots3d} from "../../api/apiClient3D";
 import InputAreaContext from "../../context/InputAreaContext";
 import {Plot3DType} from "../../utils/enums";
-// import "../../styles"
 
 const Plot3d = ({sectionId, type}) => {
     const containerRef = useRef();
@@ -31,9 +30,7 @@ const Plot3d = ({sectionId, type}) => {
     function init() {
         if (document.querySelectorAll('canvas').length > 0) return;
         const container = $(containerRef.current);
-        container.addClass('threed');
 
-        // CAMERA
         const SCREEN_WIDTH = container.parent().width();
         const SCREEN_HEIGHT = container.parent().width() * 0.55;
         const VIEW_ANGLE = 45;
@@ -51,9 +48,8 @@ const Plot3d = ({sectionId, type}) => {
         renderer.setClearColor(0x000000, 0);
 
         const $canvas = $(renderer.domElement);
-        $canvas.addClass('plot3d-implicit');
+        $canvas.addClass('plot3d');
         $canvas.css('background-color', '#fafafa');
-        // $canvas.width($canvas.parent().width() * 0.9);
         $canvas.insertAfter(container);
 
         try {
@@ -63,7 +59,7 @@ const Plot3d = ({sectionId, type}) => {
                 });
             }
         } catch (e) {
-            alert('Error loading mesh for implicit 3D plot.');
+            alert('Error loading mesh for 3D plot.');
         }
     }
 
@@ -88,7 +84,6 @@ const Plot3d = ({sectionId, type}) => {
 
     function createAxisLabel(text, position, rotation) {
         var textGeom, textMaterial, textMesh;
-        // const shapes = font.generateShapes(text, 1);
         textGeom = new THREE.BoxGeometry(text, {
             size: 1,
             height: 0.2,

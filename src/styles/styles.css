@@ -18,7 +18,7 @@
 }
 
 /* plot 3D styles */
-.plot3d, .canvasPlot, .plot3d-implicit {
+.plot3d, .canvasPlot {
     position: absolute;
     z-index: 2;
     border: 1px solid blue;

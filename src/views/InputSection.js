@@ -1,9 +1,8 @@
-import React, {memo, useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import InputAreaContext from "../context/InputAreaContext";
-import {sumbitToCalc, spaceMemory} from "../api/apiClient";
+import {sumbitToCalc} from "../api/apiClient";
 import Graphics from "./molecules/Graphics";
 import {Col, Row, Form, Button} from "react-bootstrap";
-// import { MathJaxProvider, MathJax } from 'better-react-mathjax';
 import {Node as MathJaxNode, Context as MathJaxContext} from 'react-mathjax2';
 import "../styles/styles.css"
 

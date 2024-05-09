@@ -1,11 +1,11 @@
 import React, {useContext} from 'react';
-import InpuAreaContext from "../../context/InputAreaContext";
+import InputAreaContext from "../../context/InputAreaContext";
 
 function ExampleButton({inserts, back, title, label}) {
 
-    const {input, setInput} = useContext(InpuAreaContext);
+    const {setInput} = useContext(InputAreaContext);
     const handleClick = (insertText) => {
-        setInput(prevText => insertText);
+        setInput(insertText);
     };
 
     return (

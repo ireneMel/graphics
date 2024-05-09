@@ -1,6 +1,5 @@
 .App {
     text-align: left;
-    /*background: linear-gradient(320deg, #fc466b, #3f5efb)*/
 }
 
 body {
@@ -25,9 +24,6 @@ body {
 }
 
 .mathjax-node {
-    /*flex: 1 0 auto;*/
-    /*margin: 0.5em;*/
-    /*padding: 0.5em;*/
     width: 100%;
     overflow: auto;
     word-break: break-word;
