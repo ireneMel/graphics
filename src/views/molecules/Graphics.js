@@ -5,11 +5,9 @@ import Plot3D from "./Plot3d";
 import {Plot3DType} from "../../utils/enums";
 
 function Graphics({response}) {
-    const DEFAULT_SETTINGS = [false, 3, 3, 1];
     const [sectionId, setSectionId] = useState(null);
     const [isGraph, setIsGraph] = useState(false);
     const [isTablePlot, setIsTablePlot] = useState(false);
-    const [isPlot3d, setIsPlot3d] = useState(false);
     const [isPlot3dImplicit, setIsPlot3dImplicit] = useState(false);
     const [isPlot3dExplicit, setIsPlot3dExplicit] = useState(false);
     const [isPlot3dCollection, setIsPlot3dCollection] = useState(false);
@@ -31,7 +29,7 @@ function Graphics({response}) {
         if (!response.task || response.task === "") return;
 
         setSectionId(response.sectionId);
-        setIsGraph(containsGraphCommand(task));
+        setIsGraph(containsGraph(task));
         setIsTablePlot(containsTableplotCommand(task));
 
         let isTablePlot3dTmp = task.indexOf('\\plot3d') >= 0 || task.indexOf('\\paramPlot3d') >= 0,
@@ -41,7 +39,6 @@ function Graphics({response}) {
             isPlot3dCollectionIntersectionTmp = task.indexOf('\\intersection3D') >= 0,
             isPlot3dParametricTmp = task.indexOf('\\parametricPlot3d') >= 0,
             isRenderMultipleSurfacesTmp = task.indexOf('\\show3d') >= 0
-        setIsPlot3d(isTablePlot3dTmp);
         setIsPlot3dImplicit(isPlot3dImplicitTmp);
         setIsPlot3dExplicit(isPlot3dExplicitTmp);
         setIsPlot3dCollection(isPlot3dCollectionTmp);
@@ -82,7 +79,7 @@ function Graphics({response}) {
         setKey(prevKey => prevKey + 1); // This will trigger a re-render
     };
 
-    const _handleBtnDownload = (ev) => {
+    const handleBtnDownload = (ev) => {
         ev.preventDefault();
         //TODO - implement
     };
@@ -96,7 +93,7 @@ function Graphics({response}) {
         );
     }
 
-    function containsGraphCommand(task) {
+    function containsGraph(task) {
         return task.indexOf('\\plot') >= 0
             || task.indexOf('\\textPlot') >= 0
             || task.indexOf('\\paramPlot') >= 0
@@ -114,6 +111,9 @@ function Graphics({response}) {
             && task.indexOf('\\tablePlot4') < 0;
     }
 
+    function handleReplot(task) {
+
+    }
     const getCommonSettings = () => {
 
     }
@@ -134,26 +134,16 @@ function Graphics({response}) {
 
     }
 
-    const _handleBtnReplotClickTableplot = () => {
-
-    }
-
-    const _areGraphParametersChanged = () => {
-
-    }
-
 
     return (
         <div ref={elRef} key={key}>
             {showImage && <img src={imgPath} alt="Graph" style={{width: '100%', height: '100%'}}
                                className="graph-additional-img"/>}
-            {/*<button onClick={_handleBtnDownload}>Download</button>*/}
-            {/*{isTablePlot && <TablePlotUI/>}*/}
-            {/*{isPlot3d && <Mathpar3D sectionId={sectionId}/>}*/}
-            {(isPlot3dImplicit && !isPlot3dCollection) && <Plot3D sectionId={sectionId} type={Plot3DType.IMPLICIT}/>}
-            {(isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) &&
+            {/*<button onClick={handleBtnDownload}>Download</button>*/}
+            {(!showImage && isPlot3dImplicit && !isPlot3dCollection) && <Plot3D sectionId={sectionId} type={Plot3DType.IMPLICIT}/>}
+            {(!showImage && isPlot3dExplicit && !isRenderMultipleSurfaces && !isPlot3dCollection) &&
                 <Plot3D sectionId={sectionId} type={Plot3DType.EXPLICIT}/>}
-            {(isPlot3dParametric && !isRenderMultipleSurfaces && !isPlot3dCollection) &&
+            {(!showImage && isPlot3dParametric && !isRenderMultipleSurfaces && !isPlot3dCollection) &&
                 <Plot3D sectionId={sectionId} type={Plot3DType.PARAMETRIC}/>}
 
         </div>

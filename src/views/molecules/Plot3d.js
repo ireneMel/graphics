@@ -36,7 +36,7 @@ const Plot3d = ({sectionId, type}) => {
         const VIEW_ANGLE = 45;
         const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
         const NEAR = 0.1;
-        const FAR = 20000;
+        const FAR = 19000;
         const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
         scene.add(camera);
         camera.position.set(20, 20, 10);
@@ -83,15 +83,14 @@ const Plot3d = ({sectionId, type}) => {
     }
 
     function createAxisLabel(text, position, rotation) {
-        var textGeom, textMaterial, textMesh;
-        textGeom = new THREE.BoxGeometry(text, {
+        let textGeom = new THREE.BoxGeometry(text, {
             size: 1,
             height: 0.2,
             curveSegments: 6,
             font: "helvetiker"
         });
-        textMaterial = new THREE.MeshBasicMaterial({color: "#ffd966"});
-        textMesh = new THREE.Mesh(textGeom, textMaterial);
+        let textMaterial = new THREE.MeshBasicMaterial({color: "#ffd966"});
+        let textMesh = new THREE.Mesh(textGeom, textMaterial);
         textMesh.position.x = position.x;
         textMesh.position.y = position.y;
         textMesh.position.z = position.z;
@@ -100,6 +99,7 @@ const Plot3d = ({sectionId, type}) => {
     }
 
     function callBack(geom, camera, renderer) {
+        if(geom === undefined || geom === null) return;
         let geometry = new THREE.BufferGeometry();
         const controls = new OrbitControls(camera, renderer.domElement);
         const axesSize = 1.2 * Math.max(geom[0][0], geom[0][1], geom[0][2]);
@@ -133,12 +133,12 @@ const Plot3d = ({sectionId, type}) => {
         pointLight.position.set(10, 12, 0);
         scene.add(pointLight);
 
-        const colorMaterial = new THREE.MeshStandardMaterial({
+        const color = new THREE.MeshStandardMaterial({
             color: '#' + Math.floor(Math.random() * 8388607 + 8388608).toString(16),
             side: THREE.DoubleSide,
         });
 
-        const mesh = new THREE.Mesh(geometry, colorMaterial);
+        const mesh = new THREE.Mesh(geometry, color);
         scene.add(mesh);
 
         render(renderer, camera);

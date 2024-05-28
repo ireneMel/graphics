@@ -6,6 +6,10 @@ class ExampleSections extends React.Component {
     render() {
         return (
             <div>
+                <Section title="Examples: \set2D with parameters">
+                    <ExampleButton
+                        inserts="\set2D(-5,5,-4,6,'xTitle','yTitle','title' ,1,0,100,100,100); f=3\arctg(x+1); \plot([f,-x+5, 3x+5]);" label="Example 1"/>
+                </Section>
                 <Section title="Examples: 2D plots and tables">
                     <ExampleButton inserts="\set2D(-5,5,-4,6); f=3\arctg(x+1); \plot([f,-x+5, 3x+5]);"
                                    title="" label="plot"/>
@@ -34,11 +38,11 @@ class ExampleSections extends React.Component {
                     />
                 </Section>
                 <Section title="2D plots and tables">
-                    <ExampleButton
-                        label="tableFromFile"
-                        title=""
-                        inserts="=\tableFromFile('');"
-                    />
+                    {/*<ExampleButton*/}
+                    {/*    label="tableFromFile"*/}
+                    {/*    title=""*/}
+                    {/*    inserts="=\tableFromFile('');"*/}
+                    {/*/>*/}
                     <ExampleButton
                         label="table"
                         title=""

@@ -50,12 +50,23 @@ function InputSection({sectionId, addSection}) {
                 task: userInput.replace(/\\{2}/g, "\\").replace(/\\n/g, "\n")
             };
         try {
-            await sumbitToCalc(body).then((resp) => {
+            await sumbitToCalc(body).then(async (resp) => {
                 console.log(resp)
                 if (resp.status === "ERROR") {
                     showError(resp.errorMsg);
                 } else {
-                    setLatexOutput(resp);
+                    let parameters = convertSet2DToReplot(body.task) //hasMoreThanFourParameters(body.task);
+                    if (parameters!=null) {
+                        const body = {
+                            sectionId: sectionId,
+                            task: parameters
+                        };
+                        await sumbitToCalc(body).then((resp) => {
+                            setLatexOutput(resp);
+                        })
+                    } else {
+                        setLatexOutput(resp);
+                    }
                 }
 
             });
@@ -64,12 +75,43 @@ function InputSection({sectionId, addSection}) {
         }
     }
 
+    // set2D([x0,x1, y0, y1],['xTitle','yTitle','title'] ,[0,1,12,3,5]).
+    // 1) 1 — означает: установить режим черно-белый (0 - цветной)
+    // 2) 1 — означает: установить равный масштаб по обеим осям (0- золотое сечение)
+    // 3) это размер шрифта для подписей
+    // 4) это толщина линий графиков 5) это толщина координатных осей
+    const handleAdditionalParameters = (parameters) => {
+        return `\\replot([],${parameters.slice(4).join(",")});`;
+    }
+
+    //check if there are additional parameters requested
+    function hasMoreThanFourParameters(task) {
+        return task.trim().split(/\s+/);
+    }
+
+    function convertSet2DToReplot(text) {
+        const regex = /\\set2D\((.*?)\);/g;
+
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            const set2DCommand = match[0];
+            const parameters = set2DCommand.substring(7, set2DCommand.length - 2).split(/\s*,\s*/);
+
+            if (parameters.length > 9) {
+                const replotCommand = `\\replot([],false,false,${parameters.slice(9).join(",")},);`;
+                return replotCommand;
+            } else {
+                return null;
+            }
+        }
+    }
+
     const [error, setError] = useState(null);
     const showError = (error) => {
         setError(error)
         setIsError(true)
         let images = document.querySelectorAll("#graph-additional-img")
-        while(images.length > 0) {
+        while (images.length > 0) {
             images[0].parentNode.removeChild(images[0]);
         }
     }
